@@ -3,10 +3,8 @@ public class Transaksi {
     private Pelanggan pelanggan;
     private static int productCounter = 0;
     private Produk []produk = new Produk[10];
-    
     static int count = 0;    
-    Transaksi() {
-        
+    Transaksi() {    
     }
     public Transaksi(Pelanggan pelanggan){
         this.pelanggan = pelanggan;
@@ -33,15 +31,6 @@ public class Transaksi {
         if (authentikasi(nomor,pin) == true) {
             if (pelanggan.getAkun().getSaldo()-totalharga > 10000) {
             pelanggan.getAkun().setSaldo(pelanggan.getAkun().getSaldo()-totalharga);
-            } else {
-                    System.out.println("Saldo pasca transaksi kurang dari Rp10.000");
-            }
-        } else if (authentikasi(nomor,pin) == false) {
-            if (ctr == 3) {
-                System.out.println("Dibekukan");
-            }
-            ctr++;
-        }
             if (pelanggan.getAkun().getTipe().equalsIgnoreCase("Gold")){
             cashBack(pelanggan.getAkun().getTipe(),totalharga);
             }
@@ -49,8 +38,18 @@ public class Transaksi {
             cashBack(pelanggan.getAkun().getTipe(),totalharga);
         } else if (pelanggan.getAkun().getTipe().equalsIgnoreCase("Silver")) {
             cashBack(pelanggan.getAkun().getTipe(),totalharga);
-       
-    }
+    }System.out.println("Saldo Anda Saat ini :Rp. " + this.getPelanggan().getAkun().getSaldo());
+            } else {
+                    System.out.println("Saldo pasca transaksi kurang dari Rp10.000");
+                    kosongkanKeranjang();
+            }
+        }else if (authentikasi(nomor,pin) == false) {
+            if (ctr == 3) {
+                System.out.println("Dibekukan");
+            }
+            ctr++;
+        }
+            
     }
     public boolean authentikasi(String nomor, int pin){
         if (nomor.equals(pelanggan.getAkun().getNomorpelanggan()) && pin == pelanggan.getAkun().getPin()) {
@@ -60,19 +59,12 @@ public class Transaksi {
             if (count == 3)
                 pelanggan.setAkun(null);
             }
-           
-            
-            return false;
-        
+            return false;        
     }
-
     public static int getCount() {
         return count;
     }
     
-    
-    
- 
     public void tambahSaldo(Akun akun,Produk produk){
         akun.setSaldo(akun.getSaldo()+produk.getHarga());
     }
@@ -87,6 +79,11 @@ public class Transaksi {
          }else if (jenisakun.equalsIgnoreCase("Silver")&& totalharga>1000000){
              System.out.println("Anda mendapatkan cashback tunai sebesar Rp. "+(totalharga*5)/100);
          }
-    }        
+    }
+     private void kosongkanKeranjang(){
+         for (int i = 0; i < produk.length; i++) {
+             produk[i] = new Produk();
+         }
+     }
 }
    
